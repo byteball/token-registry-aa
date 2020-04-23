@@ -9,7 +9,7 @@ describe('Updating decimals', function () {
 	this.timeout(120 * 1000)
 
 	before(async () => {
-		this.network = await Network.create()
+		this.network = await Network.create().run()
 		// this.explorer = await this.network.newObyteExplorer().ready()
 		this.genesis = await this.network.getGenesisNode().ready();
 
@@ -25,7 +25,7 @@ describe('Updating decimals', function () {
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('----- genesis', unit);
+		console.error('----- genesis', unit)
 
 		await this.network.witnessUntilStable(unit)
 
@@ -42,14 +42,13 @@ describe('Updating decimals', function () {
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('---- to Alice', unit);
+		console.error('---- to Alice', unit)
 
 		await this.network.witnessUntilStable(unit)
-		console.error('----- to Alice witnessed');
+		console.error('----- to Alice witnessed')
 		const balance = await this.alice.getBalance()
 		expect(balance.base.stable).to.be.equal(100e9)
 	})
-
 
 	it('Deploy AA', async () => {
 		const { address, unit, error } = await this.deployer.deployAgent(path.join(__dirname, '../token-registry.oscript'))
@@ -78,7 +77,7 @@ describe('Updating decimals', function () {
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
 		this.asset = unit
-		console.error('---- asset', this.asset);
+		console.error('---- asset', this.asset)
 
 		await this.network.witnessUntilStable(unit)
 	})
@@ -109,7 +108,7 @@ describe('Updating decimals', function () {
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
-		expect(response.response.responseVars.message).to.be.equal("Your description is now the current")
+		expect(response.response.responseVars.message).to.be.equal('Your description is now the current')
 		expect(response.response.responseVars[symbol]).to.be.equal(this.asset)
 		expect(response.response.responseVars[this.asset]).to.be.equal(symbol)
 		expect(response.response.responseVars[drawer_key]).to.be.equal(amount)
@@ -117,14 +116,13 @@ describe('Updating decimals', function () {
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal(amount+'')
+		expect(vars[drawer_key]).to.be.equal(amount + '')
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
 		expect(dataPayload.asset).to.be.equal(this.asset)
 		expect(dataPayload.name).to.be.equal(symbol)
 		expect(dataPayload.decimals).to.be.equal(decimals)
-
 	})
 
 	it('Alice updates decimals for the asset', async () => {
@@ -151,14 +149,13 @@ describe('Updating decimals', function () {
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
-		expect(response.response.responseVars.message).to.be.equal("Your description is now the current")
+		expect(response.response.responseVars.message).to.be.equal('Your description is now the current')
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
 		expect(dataPayload.asset).to.be.equal(this.asset)
 		expect(dataPayload.name).to.be.equal(symbol)
 		expect(dataPayload.decimals).to.be.equal(decimals)
-
 	})
 
 	it('Alice withdraws all', async () => {
@@ -193,9 +190,7 @@ describe('Updating decimals', function () {
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')
 		const payout = paymentMessage.payload.outputs.find(out => out.address === this.aliceAddress)
 		expect(payout.amount).to.be.equal(amount)
-
 	})
-
 
 	after(async () => {
 		// uncomment this line to pause test execution to get time for Obyte DAG explorer inspection

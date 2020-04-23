@@ -9,7 +9,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 	this.timeout(120 * 1000)
 
 	before(async () => {
-		this.network = await Network.create()
+		this.network = await Network.create().run()
 		// this.explorer = await this.network.newObyteExplorer().ready()
 		this.genesis = await this.network.getGenesisNode().ready();
 
@@ -25,7 +25,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('----- genesis', unit);
+		console.error('----- genesis', unit)
 
 		await this.network.witnessUntilStable(unit)
 
@@ -42,14 +42,13 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('---- to Alice', unit);
+		console.error('---- to Alice', unit)
 
 		await this.network.witnessUntilStable(unit)
-		console.error('----- to Alice witnessed');
+		console.error('----- to Alice witnessed')
 		const balance = await this.alice.getBalance()
 		expect(balance.base.stable).to.be.equal(100e9)
 	})
-
 
 	it('Deploy AA', async () => {
 		const { address, unit, error } = await this.deployer.deployAgent(path.join(__dirname, '../token-registry.oscript'))
@@ -78,7 +77,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
 		this.asset = unit
-		console.error('---- asset', this.asset);
+		console.error('---- asset', this.asset)
 
 		await this.network.witnessUntilStable(unit)
 	})
@@ -113,7 +112,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
-		expect(response.response.responseVars.message).to.be.equal("Your description is now the current")
+		expect(response.response.responseVars.message).to.be.equal('Your description is now the current')
 		expect(response.response.responseVars[symbol]).to.be.equal(this.asset)
 		expect(response.response.responseVars[this.asset]).to.be.equal(symbol)
 		expect(response.response.responseVars[drawer_key]).to.be.equal(amount)
@@ -121,7 +120,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal(amount+'')
+		expect(vars[drawer_key]).to.be.equal(amount + '')
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
@@ -156,19 +155,18 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
 		expect(response.response_unit).to.be.null
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit+'')
-		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(this.alicesDeposit+'')
+		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
+		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(this.alicesDeposit + '')
 		expect(vars[drawer_key + '_expiry_ts']).to.not.be.undefined
-
 	})
 
 	it('Alice tries to complete the withdrawal too early', async () => {
-		const { time_error } = await this.network.timetravel({shift: '1h'})
+		const { time_error } = await this.network.timetravel({ shift: '1h' })
 		expect(time_error).to.be.undefined
 
 		const symbol = 'USDC'
@@ -191,21 +189,20 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		expect(unit).to.be.validUnit
 
 		const { response } = await this.network.getAaResponseToUnit(unit)
-		expect(response.response.error).to.be.equal("warm-up period has not expired yet")
+		expect(response.response.error).to.be.equal('warm-up period has not expired yet')
 		expect(response.bounced).to.be.true
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit+'')
-		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(this.alicesDeposit+'')
+		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
+		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(this.alicesDeposit + '')
 		expect(vars[drawer_key + '_expiry_ts']).to.not.be.undefined
-
 	})
 
 	it('Alice withdraws all', async () => {
-		const { time_error } = await this.network.timetravel({shift: '7d'})
+		const { time_error } = await this.network.timetravel({ shift: '7d' })
 		expect(time_error).to.be.undefined
 
 		const symbol = 'USDC'
@@ -231,7 +228,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
 		expect(response.response_unit).to.be.validUnit
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
@@ -244,9 +241,7 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')
 		const payout = paymentMessage.payload.outputs.find(out => out.address === this.aliceAddress)
 		expect(payout.amount).to.be.equal(amount)
-
 	})
-
 
 	after(async () => {
 		// uncomment this line to pause test execution to get time for Obyte DAG explorer inspection
