@@ -9,7 +9,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 	this.timeout(120 * 1000)
 
 	before(async () => {
-		this.network = await Network.create()
+		this.network = await Network.create().run()
 		// this.explorer = await this.network.newObyteExplorer().ready()
 		this.genesis = await this.network.getGenesisNode().ready();
 
@@ -26,7 +26,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('----- genesis', unit);
+		console.error('----- genesis', unit)
 
 		await this.network.witnessUntilStableOnNode(this.deployer, unit)
 
@@ -43,10 +43,10 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
-		console.error('---- to Alice', unit);
+		console.error('---- to Alice', unit)
 
 		await this.network.witnessUntilStableOnNode(this.alice, unit)
-		console.error('----- to Alice witnessed');
+		console.error('----- to Alice witnessed')
 		const balance = await this.alice.getBalance()
 		expect(balance.base.stable).to.be.equal(100e9)
 	})
@@ -93,7 +93,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
 		this.asset1 = unit
-		console.error('---- asset', this.asset1);
+		console.error('---- asset', this.asset1)
 
 	//	await this.network.witnessUntilStable(unit)
 	})
@@ -113,7 +113,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(error).to.be.null
 		expect(unit).to.be.validUnit
 		this.asset2 = unit
-		console.error('---- asset', this.asset2);
+		console.error('---- asset', this.asset2)
 
 		await this.network.witnessUntilStable(unit)
 	})
@@ -140,13 +140,13 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(unit).to.be.validUnit
 
 		const { response } = await this.network.getAaResponseToUnit(unit)
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
 		expect(response.response_unit).to.be.validUnit
 
-		expect(response.response.responseVars.message).to.be.equal("Your description is now the current")
+		expect(response.response.responseVars.message).to.be.equal('Your description is now the current')
 		expect(response.response.responseVars[symbol]).to.be.equal(this.asset1)
 		expect(response.response.responseVars[this.asset1]).to.be.equal(symbol)
 		expect(response.response.responseVars[drawer_key]).to.be.equal(amount)
@@ -156,8 +156,8 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset1)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset1)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(amount+'')
-		expect(vars[drawer_key]).to.be.equal(amount+'')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(amount + '')
+		expect(vars[drawer_key]).to.be.equal(amount + '')
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
@@ -189,7 +189,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(unit).to.be.validUnit
 
 		const { response } = await this.network.getAaResponseToUnit(unit)
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
@@ -206,10 +206,10 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['by_largest_a2s_' + this.asset2]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset2)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support+'')
-		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(amount+'')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support + '')
+		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(amount + '')
 		expect(vars['expiry_ts_' + symbol]).to.not.be.undefined
-		expect(vars[drawer_key]).to.be.equal(amount+'')
+		expect(vars[drawer_key]).to.be.equal(amount + '')
 
 		this.asset2Support = amount
 		this.bobsDeposit = amount
@@ -233,7 +233,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(unit).to.be.validUnit
 
 		const { response } = await this.network.getAaResponseToUnit(unit)
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
@@ -253,12 +253,12 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['by_largest_a2s_' + this.asset2]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset1)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support+'')
-		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit+'')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support + '')
+		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
 	})
 
 	it('Alice supports her asset again after expiry', async () => {
-		const { time_error } = await this.network.timetravel({shift: '31d'})
+		const { time_error } = await this.network.timetravel({ shift: '31d' })
 		expect(time_error).to.be.undefined
 
 		const symbol = this.symbol
@@ -278,7 +278,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(unit).to.be.validUnit
 
 		const { response } = await this.network.getAaResponseToUnit(unit)
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
@@ -299,11 +299,10 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['by_largest_a2s_' + this.asset2]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset1)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support+'')
-		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(this.asset2Support+'')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support + '')
+		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(this.asset2Support + '')
 		expect(vars['expiry_ts_' + symbol]).to.be.undefined
 		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
-		
 	})
 
 	it('Alice withdraws all', async () => {
@@ -329,7 +328,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		expect(response.response.error).to.be.undefined
 		expect(response.bounced).to.be.false
 		expect(response.response_unit).to.be.validUnit
-	//	await this.network.witnessUntilStable(response.response_unit)
+		//	await this.network.witnessUntilStable(response.response_unit)
 
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset2]).to.be.undefined
@@ -342,9 +341,7 @@ describe("Attempt to hange symbol's asset to a new one defended", function () {
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')
 		const payout = paymentMessage.payload.outputs.find(out => out.address === this.aliceAddress)
 		expect(payout.amount).to.be.equal(amount)
-
 	})
-
 
 	after(async () => {
 		// uncomment this line to pause test execution to get time for Obyte DAG explorer inspection
