@@ -9,77 +9,20 @@ describe('Lock funds in a drawer and withdraw after a warm-up period', function 
 	this.timeout(120 * 1000)
 
 	before(async () => {
-		this.network = await Network.create().run()
-		// this.explorer = await this.network.newObyteExplorer().ready()
-		this.genesis = await this.network.getGenesisNode().ready();
-
-		[
-			this.deployer,
-			this.alice,
-		] = await Utils.asyncStartHeadlessWallets(this.network, 2)
-
-		const { unit, error } = await this.genesis.sendBytes({
-			toAddress: await this.deployer.getAddress(),
-			amount: 1e9,
-		})
-
-		expect(error).to.be.null
-		expect(unit).to.be.validUnit
-		console.error('----- genesis', unit)
-
-		await this.network.witnessUntilStable(unit)
-
-		const balance = await this.deployer.getBalance()
-		expect(balance.base.stable).to.be.equal(1e9)
-	})
-
-	it('Send bytes to Alice', async () => {
+		this.network = await Network.create()
+			.with.wallet({ alice: 100e9 })
+			.with.asset({ asset: { cap: 1e15 } })
+			.with.agent({ tr: path.join(__dirname, '../token-registry.oscript') })
+			.run()
+		this.alice = this.network.wallet.alice
 		this.aliceAddress = await this.alice.getAddress()
-		const { unit, error } = await this.genesis.sendBytes({
-			toAddress: this.aliceAddress,
-			amount: 100e9,
-		})
-
-		expect(error).to.be.null
-		expect(unit).to.be.validUnit
-		console.error('---- to Alice', unit)
-
-		await this.network.witnessUntilStable(unit)
-		console.error('----- to Alice witnessed')
+		this.aaAddress = this.network.agent.tr
+		this.asset = this.network.asset.asset
+		
+	//	this.explorer = await this.network.newObyteExplorer().ready()
+		
 		const balance = await this.alice.getBalance()
 		expect(balance.base.stable).to.be.equal(100e9)
-	})
-
-	it('Deploy AA', async () => {
-		const { address, unit, error } = await this.deployer.deployAgent(path.join(__dirname, '../token-registry.oscript'))
-
-		expect(error).to.be.null
-		expect(unit).to.be.validUnit
-		expect(address).to.be.validAddress
-
-		this.aaAddress = address
-
-	//	await this.network.witnessUntilStable(unit)
-	})
-
-	it('Alice defines an asset', async () => {
-		const { unit, error } = await this.alice.createAsset({
-			cap: 1e15,
-			is_private: false,
-			is_transferrable: true,
-			auto_destroy: false,
-			fixed_denominations: false,
-			issued_by_definer_only: true,
-			cosigned_by_definer: false,
-			spender_attested: false,
-		})
-
-		expect(error).to.be.null
-		expect(unit).to.be.validUnit
-		this.asset = unit
-		console.error('---- asset', this.asset)
-
-		await this.network.witnessUntilStable(unit)
 	})
 
 	it('Alice registers a symbol for the asset', async () => {
