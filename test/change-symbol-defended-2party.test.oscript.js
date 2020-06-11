@@ -136,8 +136,8 @@ describe("Attempt to change asset's symbol to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(amount + '')
-		expect(vars[drawer_key]).to.be.equal(amount + '')
+		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(amount)
+		expect(vars[drawer_key]).to.be.equal(amount)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
@@ -186,10 +186,10 @@ describe("Attempt to change asset's symbol to a new one defended", function () {
 		expect(vars['s2a_' + this.symbol1]).to.be.equal(this.asset)
 		expect(vars['by_largest_s2a_' + this.symbol1]).to.be.equal(this.asset)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars['support_' + this.symbol1 + '_' + this.asset]).to.be.equal(this.symbol1Support + '')
-		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(amount + '')
+		expect(vars['support_' + this.symbol1 + '_' + this.asset]).to.be.equal(this.symbol1Support)
+		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(amount)
 		expect(vars['expiry_ts_' + this.asset]).to.not.be.undefined
-		expect(vars[drawer_key]).to.be.equal(amount + '')
+		expect(vars[drawer_key]).to.be.equal(amount)
 
 		this.symbol2 = symbol
 		this.symbol2Support = amount
@@ -233,8 +233,8 @@ describe("Attempt to change asset's symbol to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(this.symbol1Support + '')
-		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
+		expect(vars['support_' + symbol + '_' + this.asset]).to.be.equal(this.symbol1Support)
+		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit)
 	})
 
 	it('Alice supports her symbol again after expiry', async () => {
@@ -279,10 +279,10 @@ describe("Attempt to change asset's symbol to a new one defended", function () {
 		expect(vars['by_largest_a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + this.symbol2]).to.be.equal(this.asset)
 		expect(vars['by_largest_s2a_' + this.symbol1]).to.be.equal(this.asset)
-		expect(vars['support_' + this.symbol2 + '_' + this.asset]).to.be.equal(this.symbol2Support + '')
-		expect(vars['support_' + this.symbol1 + '_' + this.asset]).to.be.equal(this.symbol1Support + '')
+		expect(vars['support_' + this.symbol2 + '_' + this.asset]).to.be.equal(this.symbol2Support)
+		expect(vars['support_' + this.symbol1 + '_' + this.asset]).to.be.equal(this.symbol1Support)
 		expect(vars['expiry_ts_' + this.asset]).to.be.undefined
-		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit + '')
+		expect(vars[drawer_key]).to.be.equal(this.alicesDeposit)
 	})
 
 	it('Alice withdraws all', async () => {
@@ -314,8 +314,8 @@ describe("Attempt to change asset's symbol to a new one defended", function () {
 		expect(vars['a2s_' + this.asset]).to.be.equal(this.symbol1)
 		expect(vars['s2a_' + this.symbol1]).to.be.equal(this.asset)
 		expect(vars['s2a_' + this.symbol2]).to.be.undefined
-		expect(vars[drawer_key]).to.be.equal('0')
-		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal('0')
+		expect(vars[drawer_key]).to.be.equal(0)
+		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(0)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')

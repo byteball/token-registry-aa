@@ -116,7 +116,7 @@ describe('Updating decimals', function () {
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal(amount + '')
+		expect(vars[drawer_key]).to.be.equal(amount)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
@@ -183,8 +183,8 @@ describe('Updating decimals', function () {
 		const { vars } = await this.alice.readAAStateVars(this.aaAddress)
 		expect(vars['a2s_' + this.asset]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset)
-		expect(vars[drawer_key]).to.be.equal('0')
-		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal('0')
+		expect(vars[drawer_key]).to.be.equal(0)
+		expect(vars['balance_' + this.aliceAddress + '_' + this.asset]).to.be.equal(0)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')

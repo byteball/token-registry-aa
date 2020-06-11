@@ -156,8 +156,8 @@ describe("Change symbol's asset to a new one by 2 parties", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['s2a_' + symbol]).to.be.equal(this.asset1)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset1)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(amount + '')
-		expect(vars[drawer_key]).to.be.equal(amount + '')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(amount)
+		expect(vars[drawer_key]).to.be.equal(amount)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const dataPayload = unitObj.messages.find(m => m.app === 'data').payload
@@ -205,10 +205,10 @@ describe("Change symbol's asset to a new one by 2 parties", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['by_largest_a2s_' + this.asset2]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset2)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support + '')
-		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(amount + '')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support)
+		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(amount)
 		expect(vars['expiry_ts_' + symbol]).to.not.be.undefined
-		expect(vars[drawer_key]).to.be.equal(amount + '')
+		expect(vars[drawer_key]).to.be.equal(amount)
 
 		this.asset2Support = amount
 		this.bobsDeposit = amount
@@ -287,10 +287,10 @@ describe("Change symbol's asset to a new one by 2 parties", function () {
 		expect(vars['by_largest_a2s_' + this.asset1]).to.be.equal(symbol)
 		expect(vars['by_largest_a2s_' + this.asset2]).to.be.equal(symbol)
 		expect(vars['by_largest_s2a_' + symbol]).to.be.equal(this.asset2)
-		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support + '')
-		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(this.asset2Support + '')
+		expect(vars['support_' + symbol + '_' + this.asset1]).to.be.equal(this.asset1Support)
+		expect(vars['support_' + symbol + '_' + this.asset2]).to.be.equal(this.asset2Support)
 		expect(vars['expiry_ts_' + symbol]).to.be.undefined
-		expect(vars[drawer_key]).to.be.equal(this.bobsDeposit + '')
+		expect(vars[drawer_key]).to.be.equal(this.bobsDeposit)
 
 		const { unitObj, error: er } = await this.bob.getUnitInfo({ unit: response.response_unit })
 		console.log(er, response.response_unit)
@@ -329,8 +329,8 @@ describe("Change symbol's asset to a new one by 2 parties", function () {
 		expect(vars['a2s_' + this.asset1]).to.be.undefined
 		expect(vars['a2s_' + this.asset2]).to.be.equal(this.symbol)
 		expect(vars['s2a_' + this.symbol]).to.be.equal(this.asset2)
-		expect(vars[drawer_key]).to.be.equal('0')
-		expect(vars['balance_' + this.aliceAddress + '_' + this.asset1]).to.be.equal('0')
+		expect(vars[drawer_key]).to.be.equal(0)
+		expect(vars['balance_' + this.aliceAddress + '_' + this.asset1]).to.be.equal(0)
 
 		const { unitObj } = await this.alice.getUnitInfo({ unit: response.response_unit })
 		const paymentMessage = unitObj.messages.find(m => m.app === 'payment')
